@@ -1,0 +1,62 @@
+﻿@using Microsoft.JSInterop
+@using TreeList.Module.Blazor.Components.Models
+@using System.Text.Json
+@using System.Text.Json.Serialization
+@using XpoSerialization
+@using DevExpress.ExpressApp
+@using DevExpress.Persistent.Base.General
+@using DevExpress.ExpressApp.Blazor.Services
+@using DevExpress.ExpressApp.Xpo
+@inject IJSRuntime JSRuntime
+@inject IServiceProvider ServiceProvider
+@typeparam T
+<div id=@Id></div>
+
+@code {
+    public TreeListEditorComponent()
+    {
+        Id = "treeList-container-" + Guid.NewGuid().ToString();
+    }
+    [Parameter]
+    public TreeListEditorComponentModel<T> ComponentModel { get; set; }
+    public static RenderFragment Create(TreeListEditorComponentModel<T> componentModel) =>@<TreeListEditorComponent ComponentModel=@componentModel />;
+
+    string Id { get; }
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JSRuntime.InvokeVoidAsync("TreeListEditorComponent.Init", Id, ComponentModel.KeyFieldName, DotNetObjectReference.Create(this));
+    }
+    [JSInvokable]
+    public Task RowClick(JsonElement key)
+    {
+        switch (key.ValueKind)
+        {
+            case JsonValueKind.String:
+                if (key.TryGetGuid(out var result))
+                {
+                    ComponentModel.RowClick(result);
+                }
+                else
+                {
+                    ComponentModel.RowClick(key.GetString());
+                }
+                break;
+        }
+        //ComponentModel.RowClick(key);
+        return Task.CompletedTask;
+    }
+    [JSInvokable]
+    public Task<JsonDocument> GetData(string parentIds)
+    {
+        var jsonSerializerOptions = new JsonSerializerOptions();
+        jsonSerializerOptions.MaxDepth = 64;
+        jsonSerializerOptions.Converters.Add(new PersistentBaseConverterFactory(ServiceProvider));
+        var appProvider = (IXafApplicationProvider)ServiceProvider.GetService(typeof(IXafApplicationProvider));
+        var app = appProvider.GetApplication();
+        var os = (XPObjectSpace)app.CreateObjectSpace(typeof(ITreeNode));
+        var jsonData = JsonSerializer.Serialize(ComponentModel.Data, jsonSerializerOptions);
+        var jsonDocument = JsonDocument.Parse(jsonData);
+        return Task.FromResult(jsonDocument);
+    }
+    }
