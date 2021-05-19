@@ -9,10 +9,6 @@ using DevExpress.Persistent.Base.General;
 
 namespace TreeList.Module.Blazor.Components.Models {
     public class TreeListEditorComponentModel<T> : ComponentModelBase {
-        public IEnumerable<T> Data {
-            get => GetPropertyValue<IEnumerable<T>>();
-            set => SetPropertyValue(value);
-        }
         public string KeyFieldName {
             get => GetPropertyValue<string>();
             set => SetPropertyValue(value);

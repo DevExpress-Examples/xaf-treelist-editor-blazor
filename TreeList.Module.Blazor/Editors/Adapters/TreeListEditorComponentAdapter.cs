@@ -26,8 +26,6 @@ namespace TreeList.Module.Blazor.Editors.Adapters {
             void RowClick(object key) {
                 treeListEditor.RowClick(key);
             }
-            var enumerable = treeListEditor.CollectionSource.GetEnumerable<T>();
-            ComponentModel.Data = enumerable;
             ComponentModel.KeyFieldName = treeListEditor.KeyMember;
             ComponentModel.RowClick = RowClick;
         }
