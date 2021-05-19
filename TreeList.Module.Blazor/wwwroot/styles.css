@@ -4,3 +4,7 @@
 .dx-data-row{
     cursor: pointer;
 }
+.dx-header-row{
+    font-weight: 600;
+    color: rgb(33, 37, 41);
+}

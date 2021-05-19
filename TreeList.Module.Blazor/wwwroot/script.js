@@ -1,8 +1,10 @@
 ﻿window.TreeListEditorComponent = {
     Init: function (id, keyFieldName, dotnetHelper) {
-        //var jsonData = JSON.parse(data);
         var treeList = $(`#${id}`).dxTreeList({
             keyExpr: keyFieldName,
+            rootValue: null,
+            parentIdExpr: "ParentId",
+            hasItemsExpr: "HasChildren",
             dataSource: {
                 load: function (options) {
                     return dotnetHelper.invokeMethodAsync('GetData', options.parentIds.join(","));
@@ -12,31 +14,21 @@
             remoteOperations: {
                 filtering: true
             },
-            //parentIdExpr: "parentId",
-            //hasItemsExpr: "hasItems",
-            rootValue: null,
             selection: {
                 mode: "multiple"
             },
             onRowClick: function (e) {
-                //dotnetHelper.invokeMethodAsync('RowClick', e.key);
+                if (!e.event.target.parentElement.classList.contains("dx-treelist-expanded") && !e.event.target.parentElement.classList.contains("dx-treelist-collapsed")) {
+                    dotnetHelper.invokeMethodAsync('RowClick', e.key);
+                }
             },
             columnAutoWidth: true,
             wordWrapEnabled: true,
-            showBorders: true
-            //columns: [
-            //    { dataField: "name" },
-            //    {
-            //        dataField: "size", width: 100,
-            //        customizeText: function (e) {
-            //            if (e.value !== null) {
-            //                return Math.ceil(e.value / 1024) + " KB";
-            //            }
-            //        }
-            //    },
-            //    { dataField: "createdDate", dataType: "date", width: 150 },
-            //    { dataField: "modifiedDate", dataType: "date", width: 150 }
-            //]
+            showRowLines: true,
+            showBorders: true,
+            columns: [
+                { dataField: "Name" }
+            ]
         }).dxTreeList("instance");
     }
 }

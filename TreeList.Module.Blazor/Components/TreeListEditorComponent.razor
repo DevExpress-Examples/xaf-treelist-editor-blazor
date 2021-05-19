@@ -1,13 +1,4 @@
-﻿@using Microsoft.JSInterop
-@using TreeList.Module.Blazor.Components.Models
-@using System.Text.Json
-@using System.Text.Json.Serialization
-@using XpoSerialization
-@using DevExpress.ExpressApp
-@using DevExpress.Persistent.Base.General
-@using DevExpress.ExpressApp.Blazor.Services
-@using DevExpress.ExpressApp.Xpo
-@inject IJSRuntime JSRuntime
+﻿@inject IJSRuntime JSRuntime
 @inject IServiceProvider ServiceProvider
 @typeparam T
 <div id=@Id></div>
@@ -43,20 +34,38 @@
                 }
                 break;
         }
-        //ComponentModel.RowClick(key);
         return Task.CompletedTask;
     }
     [JSInvokable]
     public Task<JsonDocument> GetData(string parentIds)
     {
+        return Task.FromResult(GetJsonData(GetObjectsByParentKeys(parentIds)));
+    }
+    private object GetObjectsByParentKeys(string parentIds)
+    {
+        var os = GetObjectSpace();
+        if (!string.IsNullOrEmpty(parentIds) && parentIds.Split(',').Length > 0)
+        {
+            var key = os.GetObjectKey(typeof(T), parentIds);
+            var parentObject = os.GetObjectByKey(typeof(T), key);
+            return ((ITreeNode)parentObject).Children;
+        }
+        else
+        {
+            return os.GetObjects<T>(CriteriaOperator.Parse("[Parent] is null"));
+        }
+    }
+    private IObjectSpace GetObjectSpace()
+    {
+        var appProvider = (IXafApplicationProvider)ServiceProvider.GetService(typeof(IXafApplicationProvider));
+        var app = appProvider.GetApplication();
+        return app.CreateObjectSpace(typeof(ITreeNode));
+    }
+    private JsonDocument GetJsonData(object data)
+    {
         var jsonSerializerOptions = new JsonSerializerOptions();
         jsonSerializerOptions.MaxDepth = 64;
         jsonSerializerOptions.Converters.Add(new PersistentBaseConverterFactory(ServiceProvider));
-        var appProvider = (IXafApplicationProvider)ServiceProvider.GetService(typeof(IXafApplicationProvider));
-        var app = appProvider.GetApplication();
-        var os = (XPObjectSpace)app.CreateObjectSpace(typeof(ITreeNode));
-        var jsonData = JsonSerializer.Serialize(ComponentModel.Data, jsonSerializerOptions);
-        var jsonDocument = JsonDocument.Parse(jsonData);
-        return Task.FromResult(jsonDocument);
+        return JsonDocument.Parse(JsonSerializer.Serialize(data, jsonSerializerOptions));
     }
-    }
+}
