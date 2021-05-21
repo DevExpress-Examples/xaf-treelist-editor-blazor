@@ -1,4 +1,5 @@
-﻿@inject IJSRuntime JSRuntime
+﻿@implements IAsyncDisposable
+@inject IJSRuntime JSRuntime
 @inject IServiceProvider ServiceProvider
 @typeparam T
 <div id=@Id></div>
@@ -10,31 +11,20 @@
     }
     [Parameter]
     public TreeListEditorComponentModel<T> ComponentModel { get; set; }
-    public static RenderFragment Create(TreeListEditorComponentModel<T> componentModel) =>@<TreeListEditorComponent ComponentModel=@componentModel />;
-
+    public static RenderFragment Create(TreeListEditorComponentModel<T> componentModel) => @<TreeListEditorComponent ComponentModel=@componentModel />;
+    public async Task Refresh()
+    {
+        await JSRuntime.InvokeVoidAsync("TreeListEditorComponent.Refresh", Id);
+    }
     string Id { get; }
-
+    protected override Task OnInitializedAsync()
+    {
+        ComponentModel.TreeList = this;
+        return base.OnInitializedAsync();
+    }
     protected async override Task OnAfterRenderAsync(bool firstRender)
     {
         await JSRuntime.InvokeVoidAsync("TreeListEditorComponent.Init", Id, ComponentModel.KeyFieldName, DotNetObjectReference.Create(this));
-    }
-    [JSInvokable]
-    public Task RowClick(JsonElement key)
-    {
-        switch (key.ValueKind)
-        {
-            case JsonValueKind.String:
-                if (key.TryGetGuid(out var result))
-                {
-                    ComponentModel.RowClick(result);
-                }
-                else
-                {
-                    ComponentModel.RowClick(key.GetString());
-                }
-                break;
-        }
-        return Task.CompletedTask;
     }
     [JSInvokable]
     public Task<JsonDocument> GetData(string parentIds)
@@ -68,4 +58,53 @@
         jsonSerializerOptions.Converters.Add(new PersistentBaseConverterFactory(ServiceProvider));
         return JsonDocument.Parse(JsonSerializer.Serialize(data, jsonSerializerOptions));
     }
-}
+    [JSInvokable]
+    public Task RowClick(JsonElement key)
+    {
+        switch (key.ValueKind)
+        {
+            case JsonValueKind.String:
+                if (key.TryGetGuid(out var result))
+                {
+                    ComponentModel.RowClick(result);
+                }
+                else
+                {
+                    ComponentModel.RowClick(key.GetString());
+                }
+                break;
+        }
+        return Task.CompletedTask;
+    }
+    [JSInvokable]
+    public Task SelectionChanged(JsonElement keys)
+    {
+        var result = new List<object>();
+        if (keys.ValueKind == JsonValueKind.Array)
+        {
+            var keysEnumerator = keys.EnumerateArray();
+            foreach (JsonElement item in keysEnumerator)
+            {
+                switch (item.ValueKind)
+                {
+                    case JsonValueKind.String:
+                        if (item.TryGetGuid(out var key))
+                        {
+                            result.Add(key);
+                        }
+                        else
+                        {
+                            result.Add(item.GetString());
+                        }
+                        break;
+                }
+            }
+        }
+        ComponentModel.SelectionChanged(result);
+        return Task.CompletedTask;
+    }
+    async ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        await JSRuntime.InvokeVoidAsync("TreeListEditorComponent.Dispose", Id);
+    }
+    }

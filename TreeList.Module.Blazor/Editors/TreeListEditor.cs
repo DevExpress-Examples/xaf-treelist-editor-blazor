@@ -9,6 +9,7 @@ using DevExpress.ExpressApp.Blazor;
 using DevExpress.ExpressApp.DC;
 using DevExpress.ExpressApp.Editors;
 using DevExpress.ExpressApp.Model;
+using Microsoft.JSInterop;
 using TreeList.Module.Blazor.Components.Models;
 using TreeList.Module.Blazor.Editors.Adapters;
 
@@ -61,8 +62,9 @@ namespace TreeList.Module.Blazor.Editors {
         }
         #endregion
         #region Collections
-        public override void Refresh() { }
-
+        public override void Refresh() {
+            Refreshed?.Invoke(this, EventArgs.Empty);
+        }
         private CollectionSourceBase collectionSource;
         internal CollectionSourceBase CollectionSource => collectionSource;
         private IObjectSpace ObjectSpace { get => collectionSource?.ObjectSpace; }
@@ -70,6 +72,32 @@ namespace TreeList.Module.Blazor.Editors {
         public void Setup(CollectionSourceBase collectionSource, XafApplication application) {
             this.collectionSource = collectionSource;
             this.application = application;
+            if(collectionSource != null) {
+                collectionSource.CriteriaApplied += CollectionSource_CriteriaApplied;
+                collectionSource.ObjectSpace.ObjectChanged += ObjectSpace_ObjectChanged;
+                collectionSource.ObjectSpace.Committed += ObjectSpace_Committed;
+            }
+        }
+        private void CollectionSource_CriteriaApplied(object sender, EventArgs e) {
+            Refresh();
+        }
+        private void ObjectSpace_ObjectChanged(object sender, ObjectChangedEventArgs e) {
+            IObjectSpace objectSpace = (IObjectSpace)sender;
+            if(!objectSpace.IsNewObject(e.Object) && ObjectTypeInfo.Type.IsAssignableFrom(e.Object.GetType())) {
+                Refresh();
+            }
+        }
+        private void ObjectSpace_Committed(object sender, EventArgs e) {
+            Refresh();
+        }
+        public override void Dispose() {
+            if(collectionSource != null) {
+                collectionSource.CriteriaApplied -= CollectionSource_CriteriaApplied;
+                collectionSource.ObjectSpace.ObjectChanged -= ObjectSpace_ObjectChanged;
+                collectionSource.ObjectSpace.Committed -= ObjectSpace_Committed;
+                collectionSource = null;
+            }
+            base.Dispose();
         }
         #endregion
         #region ControlCreation
@@ -94,5 +122,6 @@ namespace TreeList.Module.Blazor.Editors {
         }
         internal IServiceProvider ServiceProvider => ((BlazorApplication)application).ServiceProvider;
         #endregion
+        public event EventHandler Refreshed;
     }
 }
