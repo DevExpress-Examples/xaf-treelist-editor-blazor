@@ -3,7 +3,7 @@
     Init: function (id, keyFieldName, dotnetHelper) {
         var treeList = $(`#${id}`).dxTreeList({
             keyExpr: keyFieldName,
-            rootValue: null,
+            rootValue: "",
             parentIdExpr: "ParentId",
             hasItemsExpr: "HasChildren",
             dataSource: {

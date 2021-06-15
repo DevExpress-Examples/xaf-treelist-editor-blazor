@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Threading.Tasks;
 using DevExpress.ExpressApp.Blazor;
 using DevExpress.ExpressApp.Blazor.Components;
@@ -17,6 +18,7 @@ namespace TreeList.Module.Blazor.Editors.Adapters {
         void Setup(TreeListEditor treeListEditor);
     }
     public class TreeListEditorComponentAdapter<T> : ITreeListEditorComponentAdapter<T>, ITreeListEditorComponentAdapterSetup {
+        private TreeListEditor editor;
         public TreeListEditorComponentAdapter(TreeListEditorComponentModel<T> componentModel) {
             ComponentModel = componentModel ?? throw new ArgumentNullException(nameof(componentModel));
         }
@@ -26,22 +28,48 @@ namespace TreeList.Module.Blazor.Editors.Adapters {
         }
         private RenderFragment CreateComponent() => ComponentModelObserver.Create(ComponentModel, TreeListEditorComponent<T>.Create(ComponentModel));
         void ITreeListEditorComponentAdapterSetup.Setup(TreeListEditor treeListEditor) {
+            editor = treeListEditor;
             void RowClick(object key) {
                 treeListEditor.RowClick(key);
             }
             void SelectionChanged(IEnumerable<object> keys) {
                 treeListEditor.SetSelectedObjectsKeys(keys);
             }
-            ComponentModel.KeyFieldName = treeListEditor.KeyMember;
+            ComponentModel.KeyFieldName = editor.KeyMember;
             ComponentModel.RowClick = RowClick;
             ComponentModel.SelectionChanged = SelectionChanged;
-            SubscribeToEditorEvents(treeListEditor);
+            SubscribeToEditorEvents(editor);
+            SetupData(editor, out _);
         }
         private void SubscribeToEditorEvents(TreeListEditor treeListEditor) {
             treeListEditor.Refreshed += TreeListEditor_Refreshed;
         }
+        private void SetupData(TreeListEditor editor, out bool needRefresh) {
+            var enumerable = editor.CollectionSource.GetEnumerable<T>();
+            needRefresh = false;
+            if(ComponentModel.Data == enumerable && !(enumerable is INotifyCollectionChanged)) {
+                needRefresh = true;
+            }
+            if(ComponentModel.Data != enumerable) {
+                if(ComponentModel.Data is INotifyCollectionChanged oldNotifier) {
+                    oldNotifier.CollectionChanged -= OnCollectionChanged;
+                }
+                if(enumerable is INotifyCollectionChanged newNotifier) {
+                    newNotifier.CollectionChanged += OnCollectionChanged;
+                }
+            }
+            ComponentModel.Data = enumerable;
+            void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
+                if(e.Action == NotifyCollectionChangedAction.Remove) {
+                    editor.UnselectAll();
+                }
+            }
+        }
         private async void TreeListEditor_Refreshed(object sender, EventArgs e) {
-            await ComponentModel.TreeList.Refresh();
+            SetupData(editor, out bool needRefresh);
+            if(needRefresh && ComponentModel.TreeList != null) {
+                await ComponentModel.TreeList.Refresh();
+            }
         }
     }
 }

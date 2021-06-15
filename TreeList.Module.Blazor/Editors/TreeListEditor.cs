@@ -60,6 +60,10 @@ namespace TreeList.Module.Blazor.Editors {
             this.selectedObjectsKeys = selectedObjectsKeys.ToList();
             OnSelectionChanged();
         }
+        internal void UnselectAll() {
+            selectedObjectsKeys.Clear();
+            //OnSelectionChanged();
+        }
         #endregion
         #region Collections
         public override void Refresh() {
@@ -76,6 +80,7 @@ namespace TreeList.Module.Blazor.Editors {
                 collectionSource.CriteriaApplied += CollectionSource_CriteriaApplied;
                 collectionSource.ObjectSpace.ObjectChanged += ObjectSpace_ObjectChanged;
                 collectionSource.ObjectSpace.Committed += ObjectSpace_Committed;
+                collectionSource.ObjectSpace.ObjectDeleted += ObjectSpace_ObjectDeleted;
             }
         }
         private void CollectionSource_CriteriaApplied(object sender, EventArgs e) {
@@ -90,11 +95,15 @@ namespace TreeList.Module.Blazor.Editors {
         private void ObjectSpace_Committed(object sender, EventArgs e) {
             Refresh();
         }
+        private void ObjectSpace_ObjectDeleted(object sender, ObjectsManipulatingEventArgs e) {
+            
+        }
         public override void Dispose() {
             if(collectionSource != null) {
                 collectionSource.CriteriaApplied -= CollectionSource_CriteriaApplied;
                 collectionSource.ObjectSpace.ObjectChanged -= ObjectSpace_ObjectChanged;
                 collectionSource.ObjectSpace.Committed -= ObjectSpace_Committed;
+                collectionSource.ObjectSpace.ObjectDeleted -= ObjectSpace_ObjectDeleted;
                 collectionSource = null;
             }
             base.Dispose();

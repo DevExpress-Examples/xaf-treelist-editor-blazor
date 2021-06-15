@@ -13,6 +13,10 @@ namespace TreeList.Module.Blazor.Components.Models {
             get => GetPropertyValue<string>();
             set => SetPropertyValue(value);
         }
+        public IEnumerable<T> Data {
+            get => GetPropertyValue<IEnumerable<T>>();
+            set => SetPropertyValue(value);
+        }
         internal Action<object> RowClick {
             get => GetPropertyValue<Action<object>>();
             set => SetPropertyValue(value);
