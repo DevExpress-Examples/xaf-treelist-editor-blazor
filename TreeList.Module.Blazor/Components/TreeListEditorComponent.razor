@@ -10,8 +10,8 @@
         Id = "treeList-container-" + Guid.NewGuid().ToString();
     }
     [Parameter]
-    public TreeListEditorComponentModel<T> ComponentModel { get; set; }
-    public static RenderFragment Create(TreeListEditorComponentModel<T> componentModel) => @<TreeListEditorComponent ComponentModel=@componentModel />;
+    public TreeListEditorModel<T> ComponentModel { get; set; }
+    public static RenderFragment Create(TreeListEditorModel<T> componentModel) => @<TreeListEditorComponent ComponentModel=@componentModel />;
     public async Task Refresh()
     {
         await JSRuntime.InvokeVoidAsync("TreeListEditorComponent.Refresh", Id);
@@ -24,21 +24,22 @@
     }
     protected async override Task OnAfterRenderAsync(bool firstRender)
     {
-        await JSRuntime.InvokeVoidAsync("TreeListEditorComponent.Init", Id, ComponentModel.KeyFieldName, DotNetObjectReference.Create(this));
+        await JSRuntime.InvokeVoidAsync("TreeListEditorComponent.Init", Id, ComponentModel.KeyFieldName, ComponentModel.RootValue, ComponentModel.FieldNames, DotNetObjectReference.Create(this));
     }
     [JSInvokable]
-    public Task<JsonDocument> GetData(string parentIds)
+    public Task<JsonDocument> GetData(string parentId)
     {
-        return Task.FromResult(GetJsonData(GetObjectsByParentKeys(parentIds)));
+        return Task.FromResult(GetJsonData(GetObjectsByParentKeys(parentId)));
     }
-    private object GetObjectsByParentKeys(string parentIds)
+    private object GetObjectsByParentKeys(string parentId)
     {
         var os = GetObjectSpace();
-        if (!string.IsNullOrEmpty(parentIds) && parentIds.Split(',').Length > 0)
+        if (!string.IsNullOrEmpty(parentId))
         {
-            var key = os.GetObjectKey(typeof(T), parentIds);
-            var parentObject = os.GetObjectByKey(typeof(T), key);
-            return ((ITreeNode)parentObject).Children;
+            var objectType = ComponentModel.RootValueType != null ? ComponentModel.RootValueType : typeof(T);
+            var key = os.GetObjectKey(objectType, parentId);
+            var parentObject = os.GetObjectByKey(objectType, key);
+            return parentObject != null ? ((ITreeNode)parentObject).Children : null;
         }
         else
         {

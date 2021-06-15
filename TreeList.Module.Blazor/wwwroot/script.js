@@ -1,14 +1,18 @@
 ﻿window.TreeListEditorComponent = {
     _treeLists: {},
-    Init: function (id, keyFieldName, dotnetHelper) {
+    Init: function (id, keyFieldName, parentKey, fieldNames, dotnetHelper) {
         var treeList = $(`#${id}`).dxTreeList({
             keyExpr: keyFieldName,
-            rootValue: "",
+            rootValue: parentKey,
             parentIdExpr: "ParentId",
             hasItemsExpr: "HasChildren",
             dataSource: {
                 load: function (options) {
-                    return dotnetHelper.invokeMethodAsync('GetData', options.parentIds.join(","));
+                    var parentKeys = null;
+                    if (options.parentIds != null) {
+                        parentKeys = options.parentIds.join(",");
+                    }
+                    return dotnetHelper.invokeMethodAsync('GetData', parentKeys);
                 },
                 key: keyFieldName
             },
@@ -30,9 +34,7 @@
             wordWrapEnabled: true,
             showRowLines: true,
             showBorders: true,
-            columns: [
-                { dataField: "Name" }
-            ]
+            columns: fieldNames
         }).dxTreeList("instance");
         window.TreeListEditorComponent._treeLists[id] = { treeList, dotnetHelper };
     },
