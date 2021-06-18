@@ -56,20 +56,7 @@ namespace TreeList.Module.Blazor.Editors.Adapters {
             if(TreeListModel.Data == enumerable && !(enumerable is INotifyCollectionChanged)) {
                 needRefresh = true;
             }
-            //if(ComponentModel.Data != enumerable) {
-            //    if(ComponentModel.Data is INotifyCollectionChanged oldNotifier) {
-            //        oldNotifier.CollectionChanged -= OnCollectionChanged;
-            //    }
-            //    if(enumerable is INotifyCollectionChanged newNotifier) {
-            //        newNotifier.CollectionChanged += OnCollectionChanged;
-            //    }
-            //}
             TreeListModel.Data = enumerable;
-            //void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
-            //    if(e.Action == NotifyCollectionChangedAction.Remove) {
-            //        editor.UnselectAll();
-            //    }
-            //}
         }
         void ITreeListEditorAdapterColumnsSetup.SetupFieldNames(TreeListEditor treeListEditor) {
             TreeListModel.FieldNames = editor.GetVisibleColumns().Select(x => x.PropertyName);
@@ -91,8 +78,6 @@ namespace TreeList.Module.Blazor.Editors.Adapters {
                 editor.Refreshed -= TreeListEditor_Refreshed;
                 editor.Disposed -= TreeListEditor_Disposed;
             }
-            //notifier.Unsubscribe(DataGridModel);
-            //notifier.Unsubscribe(DataGridSelectionColumnModel);
             editor = null;
         }
     }

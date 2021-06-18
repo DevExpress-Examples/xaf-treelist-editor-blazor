@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.DependencyInjection;
 using TreeList.Module.Blazor.Helpers;
-using XpoSerialization;
 
 namespace TreeList.Module.Blazor.Extensions {
     public static class StartupExtensions {

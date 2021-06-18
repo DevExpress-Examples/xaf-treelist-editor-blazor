@@ -59,25 +59,6 @@ namespace TreeList.Module.Blazor.Editors {
             this.selectedObjectsKeys = selectedObjectsKeys.ToList();
             OnSelectionChanged();
         }
-        //internal void UnselectAll() {
-        //    //BeginUpdate();
-        //    //this.selectedObjectsKeys.Clear();
-        //    //EndUpdate();
-        //    //OnSelectionChanged();
-        //}
-        //public void UnselectObjects(IEnumerable<object> objectsToUnselect) {
-        //    BeginUpdate();
-        //    selectedObjectsKeys = selectedObjectsKeys.Except(objectsToUnselect).ToList();
-        //    EndUpdate();
-        //}
-        //public void BeginUpdate() {
-        //    LockSelectionEvents();
-        //    //refreshLocker.Lock();
-        //}
-        //public void EndUpdate() {
-        //    UnlockSelectionEvents();
-        //    //refreshLocker.Unlock();
-        //}
         #endregion
         #region Collections
         private CollectionSourceBase collectionSource;
@@ -87,45 +68,9 @@ namespace TreeList.Module.Blazor.Editors {
         public void Setup(CollectionSourceBase collectionSource, XafApplication application) {
             this.collectionSource = collectionSource;
             this.application = application;
-            if(collectionSource != null) {
-                collectionSource.CriteriaApplied += CollectionSource_CriteriaApplied;
-                //collectionSource.ObjectSpace.ObjectChanged += ObjectSpace_ObjectChanged;
-                //collectionSource.ObjectSpace.ObjectDeleted += ObjectSpace_ObjectDeleted;
-                //collectionSource.ObjectSpace.Committed += ObjectSpace_Committed;
-            }
-        }
-        private void CollectionSource_CriteriaApplied(object sender, EventArgs e) {
-            //Refresh();
-        }
-        private void ObjectSpace_ObjectChanged(object sender, ObjectChangedEventArgs e) {
-            //IObjectSpace objectSpace = (IObjectSpace)sender;
-            //if(!objectSpace.IsNewObject(e.Object) && ObjectTypeInfo.Type.IsAssignableFrom(e.Object.GetType())) {
-            //    Refresh();
-            //}
-        }
-        private void ObjectSpace_Committed(object sender, EventArgs e) {
-            //Refresh();
-        }
-        private void ObjectSpace_ObjectDeleted(object sender, ObjectsManipulatingEventArgs e) {
-            //Type objectType = ObjectType;
-            //if(objectType != null) {
-            //    List<object> objectsToUnselect = new List<object>();
-            //    foreach(object obj in e.Objects) {
-            //        if(objectType.IsAssignableFrom(obj.GetType())) {
-            //            objectsToUnselect.Add(ObjectTypeInfo.KeyMember.GetValue(obj));
-            //        }
-            //    }
-            //    if(objectsToUnselect.Count > 0) {
-            //        UnselectObjects(objectsToUnselect);
-            //    }
-            //}
         }
         public override void Dispose() {
             if(collectionSource != null) {
-                collectionSource.CriteriaApplied -= CollectionSource_CriteriaApplied;
-                //collectionSource.ObjectSpace.ObjectChanged -= ObjectSpace_ObjectChanged;
-                //collectionSource.ObjectSpace.Committed -= ObjectSpace_Committed;
-                //collectionSource.ObjectSpace.ObjectDeleted -= ObjectSpace_ObjectDeleted;
                 collectionSource = null;
             }
             Disposed?.Invoke(this, EventArgs.Empty);
@@ -153,13 +98,12 @@ namespace TreeList.Module.Blazor.Editors {
             ApplyModel();
             base.OnControlsCreated();
         }
-        //internal IServiceProvider ServiceProvider => ((BlazorApplication)application).ServiceProvider;
         #endregion
         public override void Refresh() {
             Refreshed?.Invoke(this, EventArgs.Empty);
         }
         public override void ApplyModel() {
-            if (Model != null) {
+            if(Model != null) {
                 CancelEventArgs args = new CancelEventArgs();
                 OnModelApplying(args);
                 if(!args.Cancel) {

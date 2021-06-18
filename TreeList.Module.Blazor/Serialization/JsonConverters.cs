@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text.Json;
@@ -20,7 +19,6 @@ namespace XpoSerialization {
             var appProvider = (IXafApplicationProvider)_serviceProvider.GetService(typeof(IXafApplicationProvider));
             var app = appProvider.GetApplication();
             var os = (XPObjectSpace)app.CreateObjectSpace(typeof(PersistentBase));
-            //return (UnitOfWork)_serviceProvider.GetService(typeof(UnitOfWork));
             return (UnitOfWork)os.Session;
         }
         public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) {
@@ -51,7 +49,6 @@ namespace XpoSerialization {
             }
             return persistentObject;
         }
-
         private static void PopulateScalarProperty(PersistentBase theObject, object theValue, XPMemberInfo memberInfo) {
             if(memberInfo == theObject.ClassInfo.OptimisticLockField) {
                 SetOptimisticLockField(theObject, (int)theValue);
@@ -60,7 +57,6 @@ namespace XpoSerialization {
                 memberInfo.SetValue(theObject, theValue);
             }
         }
-
         private static void PopulateReferenceProperty(PersistentBase parent, UnitOfWork uow, object theValue, XPMemberInfo memberInfo) {
             if(memberInfo.IsAggregated) {
                 PersistentBase propertyValue = (PersistentBase)memberInfo.GetValue(parent);
@@ -71,7 +67,6 @@ namespace XpoSerialization {
                 memberInfo.SetValue(parent, uow.GetObjectByKey(memberInfo.MemberType, theValue));
             }
         }
-
         static Dictionary<string, object> CollectPropertyValues(ref Utf8JsonReader reader, JsonSerializerOptions options, XPClassInfo classInfo, UnitOfWork uow) {
             Dictionary<string, object> propertyValues = new Dictionary<string, object>();
             while(reader.Read()) {
@@ -143,7 +138,6 @@ namespace XpoSerialization {
             else
                 SkipObject(ref reader, options);
         }
-
         private static void SkipArray(ref Utf8JsonReader reader) {
             int count = 1;
             while(true) {
@@ -156,7 +150,6 @@ namespace XpoSerialization {
                     break;
             }
         }
-
         static void SetOptimisticLockField(PersistentBase obj, int newValue) {
             obj.ClassInfo.OptimisticLockField?.SetValue(obj, newValue);
             obj.ClassInfo.OptimisticLockFieldInDataLayer?.SetValue(obj, newValue);
@@ -182,14 +175,14 @@ namespace XpoSerialization {
                             JsonSerializer.Serialize(writer, value, options);
                         }
                     }
-                    else if (member.Name == nameof(ITreeNode.Parent)) {
+                    else if(member.Name == nameof(ITreeNode.Parent)) {
                         object value = member.GetValue(Value);
                         if(value != null)
                             value = uow.GetKeyValue(value);
                         writer.WritePropertyName("ParentId");
                         JsonSerializer.Serialize(writer, value, options);
                     }
-                    else if (member.Name == nameof(ITreeNode.Children)) {
+                    else if(member.Name == nameof(ITreeNode.Children)) {
                         var value = GetBindingList(member.GetValue(Value));
                         writer.WritePropertyName("HasChildren");
                         JsonSerializer.Serialize(writer, value.Count > 0, typeof(bool), options);

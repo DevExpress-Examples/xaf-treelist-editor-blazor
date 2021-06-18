@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DevExpress.ExpressApp;
 using DevExpress.ExpressApp.DC;
 using DevExpress.Persistent.Base.General;
@@ -41,15 +37,14 @@ namespace TreeList.Module.Blazor.Controllers {
         protected virtual void SetRootValue() {
             if(treeListEditorAdapter != null) {
                 object rootValue = null;
-                object rootObject = null;
                 Type rootValueType = null;
                 ITypeInfo rootValueTypeInfo = null;
                 if(propertyCollectionSource != null) {
                     object owner = propertyCollectionSource.MemberInfo.GetOwnerInstance(propertyCollectionSource.MasterObject);
-                    if (typeof(ITreeNode).IsAssignableFrom(propertyCollectionSource.MemberInfo.ListElementType)) {
+                    if(typeof(ITreeNode).IsAssignableFrom(propertyCollectionSource.MemberInfo.ListElementType)) {
                         rootValueTypeInfo = propertyCollectionSource.MemberInfo.ListElementTypeInfo;
                         rootValueType = propertyCollectionSource.MemberInfo.ListElementType;
-                        while (rootValueTypeInfo.Base != null && typeof(ITreeNode).IsAssignableFrom(rootValueType.BaseType)) {
+                        while(rootValueTypeInfo.Base != null && typeof(ITreeNode).IsAssignableFrom(rootValueType.BaseType)) {
                             rootValueTypeInfo = rootValueTypeInfo.Base;
                             rootValueType = rootValueTypeInfo.Type;
                         }
@@ -62,7 +57,6 @@ namespace TreeList.Module.Blazor.Controllers {
                 }
                 treeListEditorAdapter.TreeListModel.RootValue = rootValue;
                 treeListEditorAdapter.TreeListModel.RootValueType = rootValueType;
-                treeListEditorAdapter.TreeListModel.RootObject = rootObject;
             }
         }
         protected override void OnDeactivated() {
