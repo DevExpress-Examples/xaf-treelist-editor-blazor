@@ -1,0 +1,116 @@
+﻿@implements IAsyncDisposable
+@inject IJSRuntime JSRuntime
+@inject IServiceProvider ServiceProvider
+<div @ref="treeListElement"></div>
+
+@code {
+    private ElementReference treeListElement;
+    private IJSObjectReference treeListModule;
+    private IJSObjectReference treeListInstance;
+
+    [Parameter]
+    public string[] PropertyNames { get; set; }
+    [Parameter]
+    public Func<string, Task<IList>> GetData { get; set; }
+    [Parameter]
+    public Func<object, string> GetKey { get; set; }
+    [Parameter]
+    public Func<object, string> GetParentKey { get; set; }
+    //[Parameter]
+    //public Func<object, string> GetRootValue { get; set; }
+    [Parameter]
+    public Func<object, bool> HasChildren { get; set; }
+    [Parameter]
+    public EventCallback<string> RowClick { get; set; }
+    [Parameter]
+    public EventCallback<string[]> SelectionChanged { get; set; }
+
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        if (GetKey == null ||
+            GetParentKey == null ||
+            GetData == null ||
+            HasChildren == null)
+        {
+            throw new ArgumentException("Please declare the following parameters: {0}", string.Join(',',
+                nameof(GetKey),
+                nameof(GetParentKey),
+                nameof(GetData),
+                nameof(HasChildren)));
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            treeListModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/DevExpress.Blazor.CustomComponents/treeListComponent.js");
+            treeListInstance = await treeListModule.InvokeAsync<IJSObjectReference>("addTreeListToElement", treeListElement, PropertyNames, DotNetObjectReference.Create(this));
+        }
+    }
+    async ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        if (treeListInstance is not null)
+        {
+            await treeListInstance.DisposeAsync();
+        }
+
+        if (treeListModule is not null)
+        {
+            await treeListModule.DisposeAsync();
+        }
+    }
+    [JSInvokable]
+    public async Task<List<Dictionary<string, object>>> OnGetDataAsync(string parentId)
+    {
+        List<Dictionary<string, object>> dictionaries = new List<Dictionary<string, object>>();
+        var data = await GetData(parentId);
+        foreach (var item in data)
+        {
+            var itemType = item.GetType();
+            var dictionary = PropertyNames.Select(n => itemType.GetProperty(n))
+                .ToDictionary(prop => prop.Name, prop => (object)prop.GetValue(item, null));
+            dictionary.Add("__key", GetKey(item));
+            //dictionary.Add("__parentKey", GetParentKey(item));
+            dictionary.Add("__parentKey", parentId);
+            dictionary.Add("__hasChild", HasChildren(item));
+            dictionaries.Add(dictionary);
+        }
+        return dictionaries;
+    }
+    [JSInvokable]
+    public async Task OnRowClick(JsonElement key)
+    {
+        switch (key.ValueKind)
+        {
+            case JsonValueKind.String:
+                await RowClick.InvokeAsync(key.ToString());
+                break;
+        }
+    }
+    [JSInvokable]
+    public async Task OnSelectionChanged(JsonElement keys)
+    {
+        var result = new List<string>();
+        if (keys.ValueKind == JsonValueKind.Array)
+        {
+            var keysEnumerator = keys.EnumerateArray();
+            foreach (JsonElement item in keysEnumerator)
+            {
+                switch (item.ValueKind)
+                {
+                    case JsonValueKind.String:
+                        result.Add(item.GetString());
+                        break;
+                }
+            }
+        }
+        await SelectionChanged.InvokeAsync(result.ToArray());
+    }
+    public async Task Refresh()
+    {
+        await treeListModule.InvokeVoidAsync("refresh", treeListElement);
+    }
+}
