@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XAFTreeList.Module.Blazor",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XAFTreeList.Blazor.Server", "XAFTreeList.Blazor.Server\XAFTreeList.Blazor.Server.csproj", "{C5265DEE-804A-46AF-97F5-B3638DA0A8C6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevExpress.Blazor.CustomComponents", "DevExpress.Blazor.CustomComponents\DevExpress.Blazor.CustomComponents.csproj", "{21937F6A-1BF5-4086-AEE1-610CC59E86BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorComponents", "BlazorComponents\BlazorComponents.csproj", "{21937F6A-1BF5-4086-AEE1-610CC59E86BB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

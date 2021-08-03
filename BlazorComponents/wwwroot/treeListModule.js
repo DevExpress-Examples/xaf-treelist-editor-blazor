@@ -1,21 +1,21 @@
 ﻿////import 'https://cdn3.devexpress.com/jslib/21.1.4/js/dx.all.js';
 
-export function addTreeListToElement(element, fieldNames, dotnetHelper) {
+export function addTreeListToElement(element, fieldNames, dotNetHelper) {
     var treeList = $(element).dxTreeList({
         keyExpr: "__key",
         rootValue: null,
         parentIdExpr: "__parentKey",
-        hasItemsExpr: "__hasChild",
+        hasItemsExpr: "__hasChildren",
+        columns: fieldNames,
         dataSource: {
+            key: "__key",
             load: function (options) {
                 var parentKeys = null;
-                if (options.parentIds != null) {
-                    //parentKeys = options.parentIds.join(",");
+                if (options.parentIds) {
                     parentKeys = options.parentIds[0];
                 }
-                return dotnetHelper.invokeMethodAsync('OnGetDataAsync', parentKeys);
-            },
-            key: "__key"
+                return dotNetHelper.invokeMethodAsync('OnGetDataAsync', parentKeys);
+            }
         },
         remoteOperations: {
             filtering: true
@@ -25,17 +25,16 @@ export function addTreeListToElement(element, fieldNames, dotnetHelper) {
         },
         onRowClick: function (e) {
             if (!e.event.target.parentElement.classList.contains("dx-treelist-expanded") && !e.event.target.parentElement.classList.contains("dx-treelist-collapsed")) {
-                dotnetHelper.invokeMethodAsync('OnRowClick', e.key);
+                dotNetHelper.invokeMethodAsync('OnRowClick', e.key);
             }
         },
         onSelectionChanged: function (e) {
-            dotnetHelper.invokeMethodAsync('OnSelectionChanged', e.selectedRowKeys);
+            dotNetHelper.invokeMethodAsync('OnSelectionChanged', e.selectedRowKeys);
         },
         columnAutoWidth: true,
         wordWrapEnabled: true,
         showRowLines: true,
-        showBorders: true,
-        columns: fieldNames
+        showBorders: true
     }).dxTreeList('instance');
     return treeList;
 }

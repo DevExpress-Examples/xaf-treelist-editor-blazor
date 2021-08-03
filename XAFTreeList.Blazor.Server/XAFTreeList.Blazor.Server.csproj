@@ -21,7 +21,7 @@
     <PackageReference Include="DevExpress.Persistent.BaseImpl" Version="21.1.4" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DevExpress.Blazor.CustomComponents\DevExpress.Blazor.CustomComponents.csproj" />
+    <ProjectReference Include="..\BlazorComponents\BlazorComponents.csproj" />
     <ProjectReference Include="..\XAFTreeList.Module.Blazor\XAFTreeList.Module.Blazor.csproj">
       <Private>True</Private>
     </ProjectReference>
