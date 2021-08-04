@@ -16,9 +16,9 @@ namespace XAFTreeList.Module.Blazor.Editors
 {
     [ListEditor(typeof(ITreeNode))]
     public class TreeListEditor : ListEditor, IComplexListEditor {
-        public class TreeListViewHolder : IComponentContentHolder {
+        public class TreeListHolder : IComponentContentHolder {
             private RenderFragment componentContent;
-            public TreeListViewHolder(TreeListModel componentModel) {
+            public TreeListHolder(TreeListModel componentModel) {
                 ComponentModel = componentModel ?? throw new ArgumentNullException(nameof(componentModel));
             }
             private RenderFragment CreateComponent() => ComponentModelObserver.Create(ComponentModel, TreeListRenderer.Create(ComponentModel));
@@ -32,20 +32,20 @@ namespace XAFTreeList.Module.Blazor.Editors
         void IComplexListEditor.Setup(CollectionSourceBase collectionSource, XafApplication application) {
             objectSpace = collectionSource.ObjectSpace;
         }
-        protected override object CreateControlsCore() => new TreeListViewHolder(new TreeListModel());
+        protected override object CreateControlsCore() => new TreeListHolder(new TreeListModel());
         protected override void AssignDataSourceToControl(object dataSource) {
-            if(Control is TreeListViewHolder holder) {
+            if(Control is TreeListHolder holder) {
                 if(data is IBindingList bindingList) {
                     bindingList.ListChanged -= BindingList_ListChanged;
                 }
-                data = (dataSource as IEnumerable)?.OfType<ITreeNode>().OrderBy(i => i.Name);
+                data = (dataSource as IEnumerable)?.Cast<ITreeNode>();
                 if(dataSource is IBindingList newBindingList) {
                     newBindingList.ListChanged += BindingList_ListChanged;
                 }
             }
         }
         protected override void OnControlsCreated() {
-            if(Control is TreeListViewHolder holder) {
+            if(Control is TreeListHolder holder) {
                 holder.ComponentModel.GetDataAsync = GetDataAsync;
                 holder.ComponentModel.FieldNames = new string[] { nameof(ITreeNode.Name) };
                 holder.ComponentModel.GetFieldDisplayText = GetFieldDisplayText;
@@ -58,8 +58,12 @@ namespace XAFTreeList.Module.Blazor.Editors
         }
 
         private Task<IEnumerable<object>> GetDataAsync(string parentKey) {
+            bool IsRoot(object obj) {
+                return obj is ITreeNode node && (node.Parent == null || !data.Contains(node.Parent));
+            }
             if(parentKey is null) {
-                return Task.FromResult(data);
+                IEnumerable<object> rootData = data?.Where(n => IsRoot(n));
+                return Task.FromResult(rootData);
             }
             ITreeNode parent = GetNode(parentKey);
             return Task.FromResult(parent.Children.Cast<object>());
@@ -70,7 +74,7 @@ namespace XAFTreeList.Module.Blazor.Editors
         private bool HasChildren(object item) => ((ITreeNode)item).Children.Count > 0;
 
         public override void BreakLinksToControls() {
-            if(Control is TreeListViewHolder holder) {
+            if(Control is TreeListHolder holder) {
                 holder.ComponentModel.RowClick -= ComponentModel_RowClick;
                 holder.ComponentModel.SelectionChanged -= ComponentModel_SelectionChanged;
             }
@@ -78,7 +82,7 @@ namespace XAFTreeList.Module.Blazor.Editors
             base.BreakLinksToControls();
         }
         public override void Refresh() {
-            if(Control is TreeListViewHolder holder) {
+            if(Control is TreeListHolder holder) {
                 holder.ComponentModel.Refresh();
             }
         }
