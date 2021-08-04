@@ -62,7 +62,7 @@ namespace XAFTreeList.Module.Blazor.Editors
                 return obj is ITreeNode node && (node.Parent == null || !data.Contains(node.Parent));
             }
             if(parentKey is null) {
-                IEnumerable<object> rootData = data?.Where(n => IsRoot(n));
+                IEnumerable<object> rootData = data?.Where(n => IsRoot(n)) ?? Array.Empty<object>();
                 return Task.FromResult(rootData);
             }
             ITreeNode parent = GetNode(parentKey);

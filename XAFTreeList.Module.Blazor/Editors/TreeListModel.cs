@@ -25,10 +25,10 @@ namespace XAFTreeList.Module.Blazor.Editors {
             get => GetPropertyValue<Func<object, bool>>();
             set => SetPropertyValue(value);
         }
-        public void Refresh() => Refreshed?.Invoke(this, EventArgs.Empty);
+        public void Refresh() => RefreshRequested?.Invoke(this, EventArgs.Empty);
         public void OnRowClick(string key) => RowClick?.Invoke(this, new TreeListRowClickEventArgs(key));
         public void OnSelectionChanged(string[] keys) => SelectionChanged?.Invoke(this, new TreeListSelectionChangedEventArgs(keys));
-        public event EventHandler Refreshed;
+        public event EventHandler RefreshRequested;
         public event EventHandler<TreeListRowClickEventArgs> RowClick;
         public event EventHandler<TreeListSelectionChangedEventArgs> SelectionChanged;
     }
