@@ -1,14 +1,17 @@
 ﻿////import 'https://cdn3.devexpress.com/jslib/21.1.4/js/dx.all.js';
 
 export function addTreeListToElement(element, fieldNames, dotNetHelper) {
+    const keyExpression = "__key";
+    const parentKeyExpression = "__parentKey";
+    const hasChildrenExpression = "__hasChildren";
     var treeList = $(element).dxTreeList({
-        keyExpr: "__key",
+        keyExpr: keyExpression,
         rootValue: null,
-        parentIdExpr: "__parentKey",
-        hasItemsExpr: "__hasChildren",
+        parentIdExpr: parentKeyExpression,
+        hasItemsExpr: hasChildrenExpression,
         columns: fieldNames,
         dataSource: {
-            key: "__key",
+            key: keyExpression,
             load: function (options) {
                 var parentKeys = null;
                 if (options.parentIds) {
@@ -40,4 +43,9 @@ export function addTreeListToElement(element, fieldNames, dotNetHelper) {
 }
 export function refresh(element) {
     $(element).dxTreeList('instance').refresh();
+}
+export function dispose(element) {
+    if (element) {
+        $(element).dxTreeList('dispose');
+    }
 }

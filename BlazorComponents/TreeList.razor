@@ -73,6 +73,15 @@
     public async Task OnSelectionChanged(string[] keys) => await SelectionChanged.InvokeAsync(keys);
     async ValueTask IAsyncDisposable.DisposeAsync()
     {
+        try
+        {
+            if (treeListModule is not null) await treeListModule.InvokeVoidAsync("dispose", treeListElement);
+        }
+        catch (Exception ex) when (ex.GetType().Name == "JSDisconnectedException")
+        {
+            //https://github.com/dotnet/aspnetcore/issues/33336#issuecomment-862425579
+        }
+
         if (treeList is not null) await treeList.DisposeAsync();
         if (treeListModule is not null) await treeListModule.DisposeAsync();
         dotNetHelper?.Dispose();
