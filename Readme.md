@@ -22,12 +22,12 @@ The second part is to create a custom List Editor using the created Razor compon
 
 ### Part 1. Creating a custom Razor component
 
-**Step 1.**
+**Step 1.**  
 **Step 2.**
 
 ### Part 2. Creating a custom List Editor
 
-**Step 1.**
+**Step 1.**  
 **Step 2.**
 
 <!-- default file list -->
@@ -35,7 +35,6 @@ The second part is to create a custom List Editor using the created Razor compon
 
 * [TreeList.razor](./BlazorComponents/TreeList.razor)
 * [treeListModule.js](./BlazorComponents/wwwroot/treeListModule.js)
-
 * [Component Model](./XAFTreeList.Module.Blazor/Editors/TreeListModel.cs)
 * [Component Renderer](./XAFTreeList.Module.Blazor/Editors/TreeListRenderer.razor)  
 * [List Editor](./XAFTreeList.Module.Blazor/Editors/TreeListEditor.cs)  
