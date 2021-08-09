@@ -1,6 +1,4 @@
-﻿////import 'https://cdn3.devexpress.com/jslib/21.1.4/js/dx.all.js';
-
-export function addTreeListToElement(element, fieldNames, dotNetHelper) {
+﻿export function addTreeListToElement(element, fieldNames, dotNetHelper) {
     const keyExpression = "__key";
     const parentKeyExpression = "__parentKey";
     const hasChildrenExpression = "__hasChildren";
