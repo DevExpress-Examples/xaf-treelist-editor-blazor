@@ -11,6 +11,17 @@ The following image demonstrates the result:
 
 <img src="./media/example.png" width="600">
 
+
+<!-- default file list -->
+## Files to Look at
+
+* [BlazorComponents/TreeList.razor](./BlazorComponents/TreeList.razor)
+* [BlazorComponents/wwwroot/treeListModule.js](./BlazorComponents/wwwroot/treeListModule.js)
+* [XAFTreeList.Module.Blazor/Editors/TreeListModel.cs](./XAFTreeList.Module.Blazor/Editors/TreeListModel.cs)
+* [XAFTreeList.Module.Blazor/Editors/TreeListRenderer.razor](./XAFTreeList.Module.Blazor/Editors/TreeListRenderer.razor)  
+* [XAFTreeList.Module.Blazor/Editors/TreeListEditor.cs](./XAFTreeList.Module.Blazor/Editors/TreeListEditor.cs)  
+<!-- default file list end -->
+
 ## Implementation Details
 
 ### Razor Component
@@ -78,17 +89,6 @@ The following table describes the API implemented in this List Editor:
 | **BreakLinksToControls** | method | Unsubscribes from the component model’s events and resets its data to release resources. |
 | **Refresh** | method | Calls the component model's *Refresh* method to update the List Editor layout when its data is changed. |
 | **GetSelectedObjects** | method | Returns an array of selected objects. |
-
-
-<!-- default file list -->
-*Files to look at*:
-
-* [TreeList.razor](./BlazorComponents/TreeList.razor)
-* [treeListModule.js](./BlazorComponents/wwwroot/treeListModule.js)
-* [Component Model](./XAFTreeList.Module.Blazor/Editors/TreeListModel.cs)
-* [Component Renderer](./XAFTreeList.Module.Blazor/Editors/TreeListRenderer.razor)  
-* [List Editor](./XAFTreeList.Module.Blazor/Editors/TreeListEditor.cs)  
-<!-- default file list end -->
 
 ## Documentation
 * [How to: Use a Custom Component to Implement List Editor (Blazor)](https://docs.devexpress.com/eXpressAppFramework/403258/ui-construction/list-editors/how-to-use-a-custom-component-to-implement-list-editor-blazor)
