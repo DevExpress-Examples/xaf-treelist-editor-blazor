@@ -1,9 +1,3 @@
----
-uid: "118740"
-seealso: []
-title: 'How to: Assign the Same Permissions for All Users of an Active Directory Group'
-owner: Ekaterina Kiseleva
----
 # XAF Blazor - How to Implement a TreeList Editor
 
 To add the TreeList Editor to your ASP.NET Core Blazor application, implement the following components:
