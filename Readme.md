@@ -1,11 +1,11 @@
 # XAF Blazor - How to Implement a TreeList Editor
 
-To add the TreeList Editor to your ASP.NET Core Blazor application, implement the following components:
+Implement the following components to add the TreeList Editor to your ASP.NET Core Blazor application:
 
-* Razor component based on the DevExtreme TreeList widget.
-* Component model that changes the state of the component.
-* Component renderer that binds the component model with the component.
-* List Editor that integrates the component into your XAF application.
+* A Razor component based on the DevExtreme TreeList widget.
+* A component model that changes the state of the component.
+* A component renderer that binds the component model with the component.
+* A List Editor that integrates the component into your XAF application.
 
 The following image demonstrates the result:
 
@@ -38,14 +38,14 @@ The following image demonstrates the result:
 	| *GetFieldDisplayText* | parameter | Encapsulates a method that returns field captions. |
 	| *GetKey* | parameter | Encapsulates a method that returns the current key value. |
 	| *HasChildren* | parameter | Encapsulates a method that determines whether the currently processed node has child nodes. |
-	| *RowClick* | parameter | Represents a method that handles an event when users click a row. |
-	| *SelectionChanged* | parameter | Represents a method that handles an event when users change selection. |  
+	| *RowClick* | parameter | Encapsulates a method that handles an event when users click a row. |
+	| *SelectionChanged* | parameter | Encapsulates a method that handles an event when users change selection. |  
 	| *OnRowClick* and *OnSelectionChanged* | methods | Used to raise the **RowClick** and **SelectionChanged** events. |
 	| *OnAfterRenderAsync* | method | Initializes the necessary [IJSObjectReference](https://docs.microsoft.com/en-us/dotnet/api/microsoft.jsinterop.ijsobjectreference), [ElementReference](https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.components.elementreference), and [DotNetObjectReference<TreeList>](https://docs.microsoft.com/en-us/dotnet/api/microsoft.jsinterop.dotnetobjectreference-1) fields for interaction with the DevExtreme TreeList widget. |
 	| *OnGetDataAsync* | method | Creates a dictionary of field name-value pairs. This method is called from JavaScript code to fetch data based on the passed parent key value. |  
 	| *Refresh* | method | Calls the JavaScript [TreeList.refresh](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxTreeList/Methods/#refresh) method. | 
 
-4. Add the [treeListModule.js](./BlazorComponents/wwwroot/treeListModule.js) script with TreeList API to the _BlazorComponents\wwwroot_ folder. In the script, configure TreeList to load data on demand as described in the following article: [Load Data on Demand](https://js.devexpress.com/Demos/WidgetsGallery/Demo/TreeList/LoadDataOnDemand/jQuery/Light/). Use the **DotNetObjectReference** object to call the declared .NET **OnGetDataAsync** method and fetch data. Handle the [TreeList.rowClick](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/#onRowClick) and [TreeList.selectionChanged](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/#onSelectionChanged) events to call the declared .NET **OnRowClick** and **OnSelectionChanged** methods.
+4. Add the [treeListModule.js](./BlazorComponents/wwwroot/treeListModule.js) script with the TreeList API to the _BlazorComponents\wwwroot_ folder. In the script, configure TreeList to load data on demand as described in the following article: [Load Data on Demand](https://js.devexpress.com/Demos/WidgetsGallery/Demo/TreeList/LoadDataOnDemand/jQuery/Light/). Use the **DotNetObjectReference** object to call the declared .NET **OnGetDataAsync** method and fetch data. Handle the [TreeList.rowClick](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/#onRowClick) and [TreeList.selectionChanged](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/#onSelectionChanged) events to call the declared .NET **OnRowClick** and **OnSelectionChanged** methods.
 
 **See also**:
 * [Call .NET methods from JavaScript functions in ASP.NET Core Blazor](https://docs.microsoft.com/en-us/aspnet/core/blazor/javascript-interoperability/call-dotnet-from-javascript?view=aspnetcore-5.0)
