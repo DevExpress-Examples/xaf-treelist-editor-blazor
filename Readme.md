@@ -101,4 +101,4 @@ The following table describes the API implemented in this List Editor:
 
 ## More Examples
 
-[How to: Use a Custom Component to Implement List Editor (Blazor)](https://github.com/DevExpress-Examples/xaf-custom-list-editor-blazor)
+[Use a Custom Component to Implement List Editor (Blazor)](https://github.com/DevExpress-Examples/xaf-custom-list-editor-blazor)
