@@ -9,8 +9,7 @@ Implement the following components to add the TreeList Editor to your ASP.NET Co
 
 The following image demonstrates the result:
 
-<img src="./media/example.png" width="600">
-
+![TreeList Editor](./media/example.png)
 
 <!-- default file list -->
 ## Files to Look at
