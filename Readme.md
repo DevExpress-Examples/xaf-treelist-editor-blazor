@@ -99,6 +99,12 @@ The following table describes the API implemented in this List Editor:
 | Refresh | method | Calls the component model's *Refresh* method to update the List Editor layout when its data is changed. |
 | GetSelectedObjects | method | Returns an array of selected objects. |
 
+### Supported Data Access mode
+
+As the created tree list editor supports only the 'Client' [Data Access mode](https://docs.devexpress.com/eXpressAppFramework/113683/ui-construction/views/list-view-data-access-modes), you need to use the [RegisterEditorSupportedModes](https://docs.devexpress.com/eXpressAppFramework/113683/ui-construction/views/list-view-data-access-modes) method as shown here:
+
+https://github.com/DevExpress-Examples/xaf-treelist-editor-blazor/blob/2a9008347ec6129a496513eb22db3916c6c58462/XAFTreeList.Module.Blazor/BlazorModule.cs#L25
+
 ## Documentation
 
 * [How to: Use a Custom Component to Implement List Editor (Blazor)](https://docs.devexpress.com/eXpressAppFramework/403258/ui-construction/list-editors/how-to-use-a-custom-component-to-implement-list-editor-blazor)
