@@ -17,7 +17,7 @@ The following image demonstrates the result:
 ![TreeList Editor](./media/example.png)
 
 <!-- default file list -->
-## Files to Look at
+## Files to Review
 
 * [BlazorComponents/TreeList.razor](./BlazorComponents/TreeList.razor)
 * [BlazorComponents/wwwroot/treeListModule.js](./BlazorComponents/wwwroot/treeListModule.js)
