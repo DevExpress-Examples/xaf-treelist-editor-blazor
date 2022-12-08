@@ -98,11 +98,11 @@ https://github.com/DevExpress-Examples/xaf-treelist-editor-blazor/blob/2a9008347
 
 ## Files to Review
 
-* [BlazorComponents/TreeList.razor](./BlazorComponents/TreeList.razor)
-* [BlazorComponents/wwwroot/treeListModule.js](./BlazorComponents/wwwroot/treeListModule.js)
-* [XAFTreeList.Module.Blazor/Editors/TreeListModel.cs](./XAFTreeList.Module.Blazor/Editors/TreeListModel.cs)
-* [XAFTreeList.Module.Blazor/Editors/TreeListRenderer.razor](./XAFTreeList.Module.Blazor/Editors/TreeListRenderer.razor)  
-* [XAFTreeList.Module.Blazor/Editors/TreeListEditor.cs](./XAFTreeList.Module.Blazor/Editors/TreeListEditor.cs)  
+* [EFCore/BlazorComponents/TreeList.razor](./EFCore/BlazorComponents/TreeList.razor)
+* [EFCore/BlazorComponents/wwwroot/treeListModule.js](./EFCore/BlazorComponents/wwwroot/treeListModule.js)
+* [EFCore/XAFTreeList.Module.Blazor/Editors/TreeListModel.cs](./EFCore/XAFTreeList.Module.Blazor/Editors/TreeListModel.cs)
+* [EFCore/XAFTreeList.Module.Blazor/Editors/TreeListRenderer.razor](./EFCore/XAFTreeList.Module.Blazor/Editors/TreeListRenderer.razor)  
+* [EFCore/XAFTreeList.Module.Blazor/Editors/TreeListEditor.cs](./EFCore/XAFTreeList.Module.Blazor/Editors/TreeListEditor.cs)  
 
 ## Documentation
 

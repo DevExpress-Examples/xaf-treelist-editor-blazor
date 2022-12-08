@@ -1,0 +1,89 @@
+﻿@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.JSInterop
+
+@implements IAsyncDisposable
+@inject IJSRuntime JSRuntime
+
+<div @ref="treeListElement"></div>
+
+@code {
+    private ElementReference treeListElement;
+    private DotNetObjectReference<TreeList> dotNetHelper;
+    private IJSObjectReference treeListModule;
+    private IJSObjectReference treeList;
+
+    [Parameter]
+    public Func<string, Task<IEnumerable<object>>> GetDataAsync { get; set; }
+    [Parameter]
+    public string[] FieldNames { get; set; }
+    [Parameter]
+    public Func<object, string, string> GetFieldDisplayText { get; set; }
+    [Parameter]
+    public Func<object, string> GetKey { get; set; }
+    [Parameter]
+    public Func<object, bool> HasChildren { get; set; }
+    [Parameter]
+    public EventCallback<string> RowClick { get; set; }
+    [Parameter]
+    public EventCallback<string[]> SelectionChanged { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        List<string> missingParameters = new List<string>();
+        if (GetDataAsync is null) missingParameters.Add(nameof(GetDataAsync));
+        if (FieldNames is null) missingParameters.Add(nameof(FieldNames));
+        if (GetFieldDisplayText is null) missingParameters.Add(nameof(GetFieldDisplayText));
+        if (GetKey is null) missingParameters.Add(nameof(GetKey));
+        if (HasChildren is null) missingParameters.Add(nameof(HasChildren));
+        if (missingParameters.Count > 0)
+        {
+            throw new ArgumentException($"Please declare the following parameter(s): {string.Join(',', missingParameters)}");
+        }
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            dotNetHelper = DotNetObjectReference.Create(this);
+            treeListModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/BlazorComponents/treeListModule.js");
+            treeList = await treeListModule.InvokeAsync<IJSObjectReference>("addTreeListToElement", treeListElement, FieldNames, dotNetHelper);
+        }
+    }
+    protected override bool ShouldRender() => false;
+    public async Task Refresh() => await treeListModule.InvokeVoidAsync("refresh", treeListElement);
+    [JSInvokable]
+    public async Task<List<Dictionary<string, object>>> OnGetDataAsync(string parentKey)
+    {
+        List<Dictionary<string, object>> dictionaries = new List<Dictionary<string, object>>();
+        var data = await GetDataAsync(parentKey);
+        foreach (var item in data)
+        {
+            var dictionary = FieldNames.ToDictionary(field => field, field => (object)GetFieldDisplayText(item, field));
+            dictionary.Add("__parentKey", parentKey);
+            dictionary.Add("__key", GetKey(item));
+            dictionary.Add("__hasChildren", HasChildren(item));
+            dictionaries.Add(dictionary);
+        }
+        return dictionaries;
+    }
+    [JSInvokable]
+    public async Task OnRowClick(string key) => await RowClick.InvokeAsync(key);
+    [JSInvokable]
+    public async Task OnSelectionChanged(string[] keys) => await SelectionChanged.InvokeAsync(keys);
+    async ValueTask IAsyncDisposable.DisposeAsync()
+    {
+        try
+        {
+            if (treeListModule is not null) await treeListModule.InvokeVoidAsync("dispose", treeListElement);
+        }
+        catch (Exception ex) when (ex.GetType().Name == "JSDisconnectedException")
+        {
+            //https://github.com/dotnet/aspnetcore/issues/33336#issuecomment-862425579
+        }
+
+        if (treeList is not null) await treeList.DisposeAsync();
+        if (treeListModule is not null) await treeListModule.DisposeAsync();
+        dotNetHelper?.Dispose();
+    }
+}
