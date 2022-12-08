@@ -1,0 +1,37 @@
+﻿@using BlazorComponents
+
+@implements IDisposable
+ 
+<TreeList @ref="treeList"
+          GetDataAsync="@ComponentModel.GetDataAsync"
+          FieldNames="@ComponentModel.FieldNames"
+          GetFieldDisplayText="@ComponentModel.GetFieldDisplayText"
+          GetKey="@ComponentModel.GetKey"
+          HasChildren="@ComponentModel.HasChildren"
+          RowClick="@ComponentModel.OnRowClick"
+          SelectionChanged="@ComponentModel.OnSelectionChanged">
+</TreeList>
+
+@code {
+    public static RenderFragment Create(TreeListModel componentModel) => @<TreeListRenderer ComponentModel=@componentModel />;
+    private TreeList treeList;
+    [Parameter]
+    public TreeListModel ComponentModel { get; set; }
+
+    public override Task SetParametersAsync(ParameterView parameters)
+    {
+        if (ComponentModel is not null)
+            ComponentModel.RefreshRequested -= ComponentModel_RefreshRequested;
+        return base.SetParametersAsync(parameters);
+    }
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        ComponentModel.RefreshRequested += ComponentModel_RefreshRequested;
+    }
+    protected void ComponentModel_RefreshRequested(object sender, EventArgs e) => treeList?.Refresh();
+    void IDisposable.Dispose()
+    {
+        ComponentModel.RefreshRequested -= ComponentModel_RefreshRequested;
+    }
+}
