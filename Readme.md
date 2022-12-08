@@ -24,7 +24,7 @@ The following image demonstrates the result:
 1. Create a Razor class library (RCL) project (_BlazorComponents_). Reference it in your _XAFTreeList.Module.Blazor_ and _XAFTreeList.Blazor.Server_ projects. 
 
 2. Register DevExtreme libraries in the _XAFTreeList.Blazor.Server/Pages/[\_Host.cshtml](./EFCore/XAFTreeList.Blazor.Server/Pages/_Host.cshtml#L16-L19)_ page as described in the following topic: [Add DevExtreme to a jQuery Application](https://js.devexpress.com/Documentation/Guide/jQuery_Components/Add_DevExtreme_to_a_jQuery_Application/).  
-3. Add the [TreeList.razor](/BlazorComponents/TreeList.razor) Razor component to the _BlazorComponents_ project. 
+3. Add the [TreeList.razor](./EFCore/BlazorComponents/TreeList.razor) Razor component to the _BlazorComponents_ project. 
 	
 	The following table describes the APIs implemented in this component: 
 	
