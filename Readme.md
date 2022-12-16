@@ -5,6 +5,9 @@
 <!-- default badges end -->
 # XAF Blazor - How to Implement a TreeList Editor
 
+> **Note**  
+> The description of this example is currently under construction and may not match the code in the example. We are currently working to provide you with up-to-date content.
+
 Implement the following components to add the TreeList Editor to your ASP.NET Core Blazor application:
 
 * A Razor component based on the DevExtreme TreeList widget.
