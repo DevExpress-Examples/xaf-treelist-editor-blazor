@@ -1,5 +1,4 @@
 <!-- default badges list -->
-![](https://img.shields.io/endpoint?url=https://codecentral.devexpress.com/api/v1/VersionRange/398001179/22.2.2%2B)
 [![](https://img.shields.io/badge/Open_in_DevExpress_Support_Center-FF7200?style=flat-square&logo=DevExpress&logoColor=white)](https://supportcenter.devexpress.com/ticket/details/T1023129)
 [![](https://img.shields.io/badge/📖_How_to_use_DevExpress_Examples-e9f6fc?style=flat-square)](https://docs.devexpress.com/GeneralInformation/403183)
 <!-- default badges end -->
@@ -101,11 +100,23 @@ https://github.com/DevExpress-Examples/xaf-treelist-editor-blazor/blob/2a9008347
 
 ## Files to Review
 
+**NOTE**: Editor implementation does not depend on your ORM tool of choice. As such, the following two sets of files contain the same code. We added both lists only for your convenience - so you can navigate to the folder you need without hesitation.    
+
+EF Core:
+
 * [EFCore/BlazorComponents/TreeList.razor](./EFCore/BlazorComponents/TreeList.razor)
 * [EFCore/BlazorComponents/wwwroot/treeListModule.js](./EFCore/BlazorComponents/wwwroot/treeListModule.js)
 * [EFCore/XAFTreeList.Module.Blazor/Editors/TreeListModel.cs](./EFCore/XAFTreeList.Module.Blazor/Editors/TreeListModel.cs)
 * [EFCore/XAFTreeList.Module.Blazor/Editors/TreeListRenderer.razor](./EFCore/XAFTreeList.Module.Blazor/Editors/TreeListRenderer.razor)  
 * [EFCore/XAFTreeList.Module.Blazor/Editors/TreeListEditor.cs](./EFCore/XAFTreeList.Module.Blazor/Editors/TreeListEditor.cs)  
+
+XPO:
+
+* [XPO/BlazorComponents/TreeList.razor](./XPO/BlazorComponents/TreeList.razor)
+* [XPO/BlazorComponents/wwwroot/treeListModule.js](./XPO/BlazorComponents/wwwroot/treeListModule.js)
+* [XPO/XAFTreeList.Module.Blazor/Editors/TreeListModel.cs](./XPO/XAFTreeList.Module.Blazor/Editors/TreeListModel.cs)
+* [XPO/XAFTreeList.Module.Blazor/Editors/TreeListRenderer.razor](./XPO/XAFTreeList.Module.Blazor/Editors/TreeListRenderer.razor)  
+* [XPO/XAFTreeList.Module.Blazor/Editors/TreeListEditor.cs](./XPO/XAFTreeList.Module.Blazor/Editors/TreeListEditor.cs)  
 
 ## Documentation
 
