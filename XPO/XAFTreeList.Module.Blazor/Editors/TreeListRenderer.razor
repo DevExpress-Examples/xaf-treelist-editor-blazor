@@ -1,8 +1,9 @@
 ﻿@using BlazorComponents
 
 @implements IDisposable
- 
+
 <TreeList @ref="treeList"
+          @key="@ComponentModel"
           GetDataAsync="@ComponentModel.GetDataAsync"
           FieldNames="@ComponentModel.FieldNames"
           GetFieldDisplayText="@ComponentModel.GetFieldDisplayText"
