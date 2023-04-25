@@ -40,6 +40,7 @@
     return treeList;
 }
 export function refresh(element) {
+    $(element).dxTreeList('instance').option("expandedRowKeys",[]);
     $(element).dxTreeList('instance').refresh();
 }
 export function dispose(element) {
