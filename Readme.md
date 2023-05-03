@@ -24,10 +24,10 @@ The following image demonstrates the result:
 
 ### Razor Component
 
-1. Create a Razor class library (RCL) project (_BlazorComponents_). Reference it in your _XAFTreeList.Module.Blazor_ and _XAFTreeList.Blazor.Server_ projects. 
+1. Create a Razor class library (RCL) project (_BlazorComponents_). Reference it in your _TreeListDemoEF.Blazor.Server_ project. 
 
-2. Register DevExtreme libraries in the _XAFTreeList.Blazor.Server/Pages/[\_Host.cshtml](./EFCore/XAFTreeList.Blazor.Server/Pages/_Host.cshtml#L16-L19)_ page as described in the following topic: [Add DevExtreme to a jQuery Application](https://js.devexpress.com/Documentation/Guide/jQuery_Components/Add_DevExtreme_to_a_jQuery_Application/).  
-3. Add the [TreeList.razor](./EFCore/BlazorComponents/TreeList.razor) Razor component to the _BlazorComponents_ project. 
+2. Register DevExtreme libraries in the _TreeListDemoEF.Blazor.Server/Pages/[\_Host.cshtml](./CS/EFCore/TreeListDemoEF/TreeListDemoEF.Blazor.Server/Pages/_Host.cshtml#L16-L19)_ page as described in the following topic: [Add DevExtreme to a jQuery Application](https://js.devexpress.com/Documentation/Guide/jQuery_Components/Add_DevExtreme_to_a_jQuery_Application/).  
+3. Add the [TreeList.razor](./CS/EFCore/TreeListDemoEF/BlazorComponents/TreeList.razor) Razor component to the _BlazorComponents_ project. 
 	
 	The following table describes the APIs implemented in this component: 
 	
@@ -45,7 +45,7 @@ The following image demonstrates the result:
 	| OnGetDataAsync | method | Creates a dictionary of field name-value pairs. This method is called from JavaScript code to fetch data based on the passed parent key value. |  
 	| Refresh | method | Calls the JavaScript [TreeList.refresh](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxTreeList/Methods/#refresh) method. | 
 
-4. Add the [treeListModule.js](./EFCore/BlazorComponents/wwwroot/treeListModule.js) script with the TreeList API to the _BlazorComponents\wwwroot_ folder. In the script, configure TreeList to load data on demand as described in the following article: [Load Data on Demand](https://js.devexpress.com/Demos/WidgetsGallery/Demo/TreeList/LoadDataOnDemand/jQuery/Light/). Use the **DotNetObjectReference** object to call the declared .NET **OnGetDataAsync** method and fetch data. Handle the [TreeList.rowClick](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/#onRowClick) and [TreeList.selectionChanged](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/#onSelectionChanged) events to call the declared .NET **OnRowClick** and **OnSelectionChanged** methods.
+4. Add the [treeListModule.js](./CS/EFCore/TreeListDemoEF/BlazorComponents/wwwroot/treeListModule.js ) script with the TreeList API to the _BlazorComponents\wwwroot_ folder. In the script, configure TreeList to load data on demand as described in the following article: [Load Data on Demand](https://js.devexpress.com/Demos/WidgetsGallery/Demo/TreeList/LoadDataOnDemand/jQuery/Light/). Use the **DotNetObjectReference** object to call the declared .NET **OnGetDataAsync** method and fetch data. Handle the [TreeList.rowClick](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/#onRowClick) and [TreeList.selectionChanged](https://js.devexpress.com/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/#onSelectionChanged) events to call the declared .NET **OnRowClick** and **OnSelectionChanged** methods.
 
 **See also**:
 * [Call .NET methods from JavaScript functions in ASP.NET Core Blazor](https://docs.microsoft.com/en-us/aspnet/core/blazor/javascript-interoperability/call-dotnet-from-javascript?view=aspnetcore-5.0)
@@ -54,7 +54,7 @@ The following image demonstrates the result:
 
 ### Component Model 
 
-1. In the Blazor-specific module project (_XAFTreeList.Module.Blazor_), create the **ComponentModelBase** descendant and name it [TreeListModel.cs](./EFCore/XAFTreeList.Module.Blazor/Editors/TreeListModel.cs). 
+1. In the Blazor project (_TreeListDemoEF.Blazor.Server_), create the **ComponentModelBase** descendant and name it [TreeListModel.cs](./CS/EFCore/TreeListDemoEF/TreeListDemoEF.Blazor.Server/Editors/TreeListEditor/TreeListModel.cs). 
 
 	The following table describes the APIs implemented in this component: 
 
@@ -68,11 +68,11 @@ The following image demonstrates the result:
 	| RowClick, SelectionChanged, RefreshRequested | events | Occur when users click a row and change selection. |
 	| OnRowClick, OnSelectionChanged, Refresh | methods | Used to raise the corresponding events. |
 
-2. Create **EventArgs** descendants to pass key values to the *RowClick* and *SelectionChanged* event handlers. See these classes in the following file: [TreeListModel.cs](./EFCore/XAFTreeList.Module.Blazor/Editors/TreeListModel.cs#L35-L46).
+2. Create **EventArgs** descendants to pass key values to the *RowClick* and *SelectionChanged* event handlers. See these classes in the following file: [TreeListModel.cs](./CS/EFCore/TreeListDemoEF/TreeListDemoEF.Blazor.Server/Editors/TreeListEditor/TreeListModel.cs#L35-L46).
 
 ### Component Renderer
 
-1. In the Blazor-specific module project (_XAFTreeList.Module.Blazor_), create a new Razor component and name it [TreeListRenderer.razor](./EFCore/XAFTreeList.Module.Blazor/Editors/TreeListRenderer.razor). This component renders the **TreeList** component from the RCL project. 
+1. In the Blazor project (_TreeListDemoEF.Blazor.Server_), create a new Razor component and name it [TreeListRenderer.razor](./CS/EFCore/TreeListDemoEF/TreeListDemoEF.Blazor.Server/Editors/TreeListEditor/TreeListRenderer.razor). This component renders the **TreeList** component from the RCL project. 
 2. Ensure that the component’s [Build Action](https://docs.microsoft.com/en-us/visualstudio/ide/build-actions) property is set to **Content**.
 3. Declare the required parameters and implement the *IDisposable* interface. 
 
@@ -97,27 +97,19 @@ The following table describes the API implemented in this List Editor:
 
 As the created tree list editor supports only the 'Client' [Data Access mode](https://docs.devexpress.com/eXpressAppFramework/113683/ui-construction/views/list-view-data-access-modes), you need to use the [RegisterEditorSupportedModes](https://docs.devexpress.com/eXpressAppFramework/113683/ui-construction/views/list-view-data-access-modes) method as shown here:
 
-https://github.com/DevExpress-Examples/xaf-treelist-editor-blazor/blob/2a9008347ec6129a496513eb22db3916c6c58462/XAFTreeList.Module.Blazor/BlazorModule.cs#L25
+https://github.com/DevExpress-Examples/xaf-treelist-editor-blazor/blob/34ef5255cd98d894d4f48360943adbebe11babfe/CS/EFCore/TreeListDemoEF/TreeListDemoEF.Blazor.Server/BlazorModule.cs#L21
 
 ## Files to Review
 
-**NOTE**: Editor implementation does not depend on your ORM tool of choice. As such, the following two sets of files contain the same code. We added both lists only for your convenience - so you can navigate to the folder you need without hesitation.    
-
 EF Core:
 
-* [EFCore/BlazorComponents/TreeList.razor](./EFCore/BlazorComponents/TreeList.razor)
-* [EFCore/BlazorComponents/wwwroot/treeListModule.js](./EFCore/BlazorComponents/wwwroot/treeListModule.js)
-* [EFCore/XAFTreeList.Module.Blazor/Editors/TreeListModel.cs](./EFCore/XAFTreeList.Module.Blazor/Editors/TreeListModel.cs)
-* [EFCore/XAFTreeList.Module.Blazor/Editors/TreeListRenderer.razor](./EFCore/XAFTreeList.Module.Blazor/Editors/TreeListRenderer.razor)  
-* [EFCore/XAFTreeList.Module.Blazor/Editors/TreeListEditor.cs](./EFCore/XAFTreeList.Module.Blazor/Editors/TreeListEditor.cs)  
+* [BlazorComponents/TreeList.razor](./CS/EFCore/TreeListDemoEF/BlazorComponents/TreeList.razor)
+* [BlazorComponents/wwwroot/treeListModule.js](./CS/EFCore/TreeListDemoEF/BlazorComponents/wwwroot/treeListModule.js)
+* [EFCore/XAFTreeList.Module.Blazor/Editors/TreeListModel.cs](./CS/EFCore/TreeListDemoEF/TreeListDemoEF.Blazor.Server/Editors/TreeListEditor/TreeListModel.cs )
+* [EFCore/XAFTreeList.Module.Blazor/Editors/TreeListRenderer.razor](./CS/EFCore/TreeListDemoEF/TreeListDemoEF.Blazor.Server/Editors/TreeListEditor/TreeListRenderer.razor)  
+* [EFCore/XAFTreeList.Module.Blazor/Editors/TreeListEditor.cs](./CS/EFCore/TreeListDemoEF/TreeListDemoEF.Blazor.Server/Editors/TreeListEditor/TreeListEditor.cs)  
 
-XPO:
 
-* [XPO/BlazorComponents/TreeList.razor](./XPO/BlazorComponents/TreeList.razor)
-* [XPO/BlazorComponents/wwwroot/treeListModule.js](./XPO/BlazorComponents/wwwroot/treeListModule.js)
-* [XPO/XAFTreeList.Module.Blazor/Editors/TreeListModel.cs](./XPO/XAFTreeList.Module.Blazor/Editors/TreeListModel.cs)
-* [XPO/XAFTreeList.Module.Blazor/Editors/TreeListRenderer.razor](./XPO/XAFTreeList.Module.Blazor/Editors/TreeListRenderer.razor)  
-* [XPO/XAFTreeList.Module.Blazor/Editors/TreeListEditor.cs](./XPO/XAFTreeList.Module.Blazor/Editors/TreeListEditor.cs)  
 
 ## Documentation
 
