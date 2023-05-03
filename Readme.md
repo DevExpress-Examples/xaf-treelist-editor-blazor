@@ -17,7 +17,7 @@ Implement the following components to add the TreeList Editor to your ASP.NET Co
 
 The following image demonstrates the result:
 
-![TreeList Editor](./media/example.png)
+![example](https://user-images.githubusercontent.com/14300209/235937849-de05ae88-f1cf-4ff8-baf1-833d78769016.png)
 
 
 ## Implementation Details
