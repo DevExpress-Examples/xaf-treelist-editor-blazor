@@ -3,7 +3,7 @@
 [![](https://img.shields.io/badge/Open_in_DevExpress_Support_Center-FF7200?style=flat-square&logo=DevExpress&logoColor=white)](https://supportcenter.devexpress.com/ticket/details/T1023129)
 [![](https://img.shields.io/badge/📖_How_to_use_DevExpress_Examples-e9f6fc?style=flat-square)](https://docs.devexpress.com/GeneralInformation/403183)
 <!-- default badges end -->
-# XAF Blazor - How to Implement a TreeList Editor
+# XAF Blazor - How to Implement a TreeList Editor to Display Hierarchical Data
 
 > **Note**  
 > The description of this example is currently under construction and may not match the code in the example. We are currently working to provide you with up-to-date content.
@@ -20,7 +20,23 @@ The following image demonstrates the result:
 ![example](https://user-images.githubusercontent.com/14300209/235937849-de05ae88-f1cf-4ff8-baf1-833d78769016.png)
 
 
+## Alternative Solutions
+
+### Group List View Data Using DxGridListEditor
+If this DevExtreme-based solution does not meet your requirements (for instance, you do not want to implement the ITreeNode contract in your data model from scratch or do not want to inherit your class from our HCategory), you can consider using the data grid and group by the 'Parent' property to emulate a tree: [Group List View Data](https://docs.devexpress.com/eXpressAppFramework/403248/getting-started/in-depth-tutorial-blazor/customize-data-display-and-view-layout/group-list-view-data). In this case, it is also natural to enable a 'Split View' (MasterDetailMode = ListAndDetailView): [Enable Split Layout in a List View](https://docs.devexpress.com/eXpressAppFramework/404203/getting-started/in-depth-tutorial-blazor/customize-data-display-and-view-layout/display-a-detail-view-with-a-list-view).
+
+### Implement a Custom List Editor or View Item from Scratch
+Of course, you can also build your own List Editor or View Item to display your custom data model using suitable DevExtreme or Blazor components: [Using a Custom Control that is not Integrated by Default](https://docs.devexpress.com/eXpressAppFramework/113610/ui-construction/using-a-custom-control-that-is-not-integrated-by-default/using-a-custom-control-that-is-not-integrated-by-default).
+
 ## Implementation Details
+
+### ITreeNode-based Data Model
+
+XAF has a built-in ITreeNode interface, which can be implemented by business objects to visualize them as a tree in a ListView (refer to the Category and related classes in this example). You can find more example code of ITreeNode-based data models below OR you can inherit your business class from our built-in HCategory class):
+ - **EF Core**: "c:\Program Files\DevExpress 2X.Y\Components\Sources\DevExpress.Persistent\DevExpress.Persistent.BaseImpl.EFCore\HCategory.cs" 
+ - **XPO**: "c:\Program Files\DevExpress 2X.Y\Components\Sources\DevExpress.Persistent\DevExpress.Persistent.BaseImpl.Xpo\HCategory.cs" 
+
+This hierarchical data visualization is currently supported for WinForms and ASP.NET WebForms out-of-the-box (hence this example for ASP.NET Core Blazor).
 
 ### Razor Component
 
