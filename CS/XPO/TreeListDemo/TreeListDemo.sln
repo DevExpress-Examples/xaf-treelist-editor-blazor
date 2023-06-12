@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33424.131
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TreeListDemo.Module", "TreeListDemo.Module\TreeListDemo.Module.csproj", "{F88189B8-966D-4BAA-BE73-C1F815725518}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TreeListDemo.Blazor.Server", "TreeListDemo.Blazor.Server\TreeListDemo.Blazor.Server.csproj", "{B64F0750-EE11-49DE-847F-83139F1DE702}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TreeListDemo.Module", "TreeListDemo.Module\TreeListDemo.Module.csproj", "{F88189B8-966D-4BAA-BE73-C1F815725518}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorComponents", "BlazorComponents\BlazorComponents.csproj", "{D4438CE7-6C80-4CA7-BDE2-DA2CF49E5A82}"
 EndProject
