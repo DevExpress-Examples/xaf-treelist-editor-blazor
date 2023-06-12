@@ -40,6 +40,7 @@ public class TreeListDemoEFEFCoreDbContext : DbContext {
     public DbSet<Project> Projects { get; set; }
     public DbSet<ProjectArea> ProjectAreas { get; set; }
     public DbSet<ProjectGroup> ProjectGroups { get; set; }
+    public DbSet<SimpleTree> SimpleTrees { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         base.OnModelCreating(modelBuilder);
