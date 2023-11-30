@@ -19,7 +19,7 @@ Implement the following components to add the TreeList Editor to your ASP.NET Co
 
 The following image demonstrates the result:
 
-![example](https://user-images.githubusercontent.com/14300209/235937849-de05ae88-f1cf-4ff8-baf1-833d78769016.png)
+<kbd>![example](https://user-images.githubusercontent.com/14300209/235937849-de05ae88-f1cf-4ff8-baf1-833d78769016.png)</kbd>
 
 
 ## Alternative Solutions
@@ -119,8 +119,6 @@ https://github.com/DevExpress-Examples/xaf-treelist-editor-blazor/blob/34ef5255c
 
 ## Files to Review
 
-EF Core:
-
 * [BlazorComponents/TreeList.razor](./CS/EFCore/TreeListDemoEF/BlazorComponents/TreeList.razor)
 * [BlazorComponents/wwwroot/treeListModule.js](./CS/EFCore/TreeListDemoEF/BlazorComponents/wwwroot/treeListModule.js)
 * [EFCore/XAFTreeList.Module.Blazor/Editors/TreeListModel.cs](./CS/EFCore/TreeListDemoEF/TreeListDemoEF.Blazor.Server/Editors/TreeListEditor/TreeListModel.cs )
@@ -136,4 +134,4 @@ EF Core:
 
 ## More Examples
 
-[Use a Custom Component to Implement List Editor (Blazor)](https://github.com/DevExpress-Examples/xaf-custom-list-editor-blazor)
+* [Use a Custom Component to Implement List Editor (Blazor)](https://github.com/DevExpress-Examples/xaf-custom-list-editor-blazor)
